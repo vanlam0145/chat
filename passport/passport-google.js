@@ -14,7 +14,7 @@ passport.use(new GoogleStategy({
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret,
     //profileFields: ['email', 'displayName','photos'],
-    callbackURL: 'https://cross-app-chat.herokuapp.com/auth/google/callback',
+    callbackURL: keys.google.deploy(),
     passReqToCallback: true
 }, (req, token, refreshToken, profile, done) => {
     //console.log("GOOGLE: ",profile);

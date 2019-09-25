@@ -20,7 +20,9 @@
 <body>
     <%- include ../partials/navbar.ejs %>
     <div class="col-md-12">
-
+            <input type="hidden" id="name-user" value="<%= user.username %>">
+            <input type="hidden" id="name-image" value="<%= user.userImage %>">
+            <input type="hidden" id="name-email" value="<%= user.email %>">
 
         <div class="col-md-12">
             <div class="chat_container">
@@ -40,7 +42,7 @@
                                             </div>
                                             <div class="content">
                                                 <div class="main">
-                                                    <h3 class="name">Username || Fullname</h3>
+                                                    <h3 class="name"><%=user.fullname||user.username%></h3>
                                                     <p class="profession-online">
                                                         <i class="fa fa-circle online" aria-hidden="true"></i>
                                                         Online
@@ -75,7 +77,11 @@
                                                         Online Friends <span id="numOfFriends"></span>
                                                     </p>
                                                     <hr style="margin-top:10px" />
-
+                                                    <% if(data.friendsList.length>0){ %>
+                                                        <% _.forEach(data.friendsList,function(fr){ %>
+                                                            <div class="fr" hidden>@<%= fr.friendName %></div>
+                                                        <% }) %>
+                                                    <% } %>
                                                     <div class="onlineFriends"></div>
 
                                                 </div>
@@ -96,7 +102,7 @@
                             <div class="new_message_head">
                                 <div class="pull-left">
                                     <button class="club_name">
-                                        Group Name
+                                        <%= groupName%>
                                     </button>
                                 </div>
                                 <div class="pull-right">
@@ -226,6 +232,7 @@
     <script src="/js/group/groupchat.js"></script>
     <script src="/js/group/sendRequest.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.3/mustache.js"></script>
+    <script src="/js/global.js"></script>   
 </body>
 
 </html>

@@ -12,7 +12,6 @@ $(document).ready(function () {
         })
     })
     socket.on('newMessage', (message) => {
-        console.log(message);
         var template = $('#message-template').html();
         var message = Mustache.render(template, {
             text: message.text,

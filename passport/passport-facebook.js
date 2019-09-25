@@ -14,13 +14,12 @@ passport.use(new FacebookStategy({
     clientID: keys.facebook.clientID,
     clientSecret: keys.facebook.clientSecret,
     profileFields: ['email', 'displayName','photos'],
-    callbackURL: 'https://cross-app-chat.herokuapp.com/auth/facebook/callback',
+    callbackURL: keys.facebook.deploy(),
     passReqToCallback: true
 }, (req, token, refreshToken, profile, done) => {
-    //console.log("FACEBOOK: ", profile);
+    console.log("FACEBOOK: ", profile);
     User.findOne({ email: profile._json.email }, (err, user) => {
         if (err) {
-
             return done(err);
         }
         if (user) {

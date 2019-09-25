@@ -29,6 +29,9 @@
     </div>
 
     <div class="col-md-12">
+        <input type="hidden" id="name-user" value="<%= user.username %>">
+        <input type="hidden" id="name-image" value="<%= user.userImage %>">
+        <input type="hidden" id="name-email" value="<%= user.email %>">
         <div class="">
             <div class="row">
                 <div class="col-md-3">
@@ -36,7 +39,7 @@
                         <div class="col-md-12">
                             <div class="filter-container">
                                 <div class="card">
-                                    <form action="#" method="post">
+                                    <form action="#" method="post" id="frmFilter">
                                         <div class="content">
                                             <p class="filter">
                                                 FILTER
@@ -64,13 +67,13 @@
                         <div class="category-list">
                             <div class="row">
                                 <% _.forEach(val,function(val2){ %>
-                                <form action="#" method="post" id="add-fav">
+                                <form action="/home" method="post" id="Favorite">
                                     <div class="item col-md-6">
                                         <a style="text-decoration: none" href="/group/<%= val2.name %>">
                                             <div class="thumbnail">
                                                 <img src="/uploads/<%= val2.image %>" alt="avatar">
                                                 <div class="caption">
-                                                    <h4><%= val2.name %></h4>
+                                                    <h4><%= val2.name %>(<%= val2.fans.length %>)</h4>
 
                                                     <div class="row">
                                                         <div class="col-xs-12 col-md-6">
@@ -80,7 +83,11 @@
                                                         </div>
 
                                                         <div class="col-xs-12 col-md-6">
-                                                            <button class="btn add-fav">
+                                                            <input type="hidden" name="id" id="id"
+                                                                value="<%=val2._id%>">
+                                                            <input type="hidden" name="clubname" id="club_Name"
+                                                                value="<%=val2.name%>">
+                                                            <button  class="btn add-fav">
                                                                 Add To Favorite
                                                             </button>
                                                         </div>
@@ -109,6 +116,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/home.js"></script>
     <script src="/js/group/sendRequest.js"></script>
+    <script src="/js/global.js"></script>
 </body>
 
 </html>

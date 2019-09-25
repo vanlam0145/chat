@@ -14,6 +14,7 @@ const container = require('./container');
 const passport = require('passport');
 const socketIO = require('socket.io');
 const { Users } = require('./helpers/UsersClass');
+const { Global } = require('./helpers/Global');
 
 container.resolve(function (users, _, admin, home, group) {
     const app = SetupExpress();
@@ -21,10 +22,6 @@ container.resolve(function (users, _, admin, home, group) {
     function SetupExpress() {
         const app = express();
         const port = process.env.PORT || 3000;
-
-        const server = http.createServer(app);
-
-        const secureIO = socketIO(server);
         mongoose
             .connect(
                 "mongodb+srv://cross:123xyz@cluster0-lstqi.mongodb.net/chat?retryWrites=true",
@@ -33,22 +30,31 @@ container.resolve(function (users, _, admin, home, group) {
             .then(() => console.log("MongoDB successfully connected"))
             .catch(err => console.log(err)
             );
-        // app.set('port', port);
-        // app.set('secPort', port + 443);
-        // var option = {
-        //     key: fs.readFileSync('config/private.key'),
-        //     cert: fs.readFileSync('config/certificate.pem'),
-        // }
-        // const secureServer = https.createServer(option, app);
-        // secureServer.listen(app.get('secPort'), () => {
-        //     console.log(`Secure server listening on port`, app.get('secPort'))
-        // })
-        server.listen(port, function () {
-            console.log(`server run on port : 3000!!!`);
-        })
+        var secureIO;
+        if (process.env.PORT) {
+            const server = http.createServer(app);
+            secureIO=socketIO(server);
+            server.listen(port, function () {
+                console.log(`server run on port : 3000!!!`);
+            })
+        }
+        else {
+            app.set('port', port);
+            app.set('secPort', port + 443);
+            var option = {
+                key: fs.readFileSync('config/private.key'),
+                cert: fs.readFileSync('config/certificate.pem'),
+            }
+            const secureServer = https.createServer(option, app);
+            secureServer.listen(app.get('secPort'), () => {
+                console.log(`Secure server listening on port`, app.get('secPort'))
+            })
+            secureIO = socketIO(secureServer);
+        }
         ConfigureExpress(app);
         require('./socket/groupchat')(secureIO, Users);
         require('./socket/friend')(secureIO);
+        require('./socket/globalroom')(secureIO, Global, _);
         const router = require('express-promise-router')();
         users.SetRouting(router);
         admin.SetRouting(router);

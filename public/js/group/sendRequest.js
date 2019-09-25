@@ -82,6 +82,7 @@ $(document).ready(function () {
     })
     $('#cancel_friend').on('click', function () {
         var user_Id = $('#user_Id').val();
+        console.log("can");
         $.ajax({
             url: '/group/' + room,
             type: 'post',

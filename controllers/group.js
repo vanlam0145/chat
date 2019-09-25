@@ -8,7 +8,7 @@ module.exports = function (Users, async) {
             const name = req.params.name;
             async.parallel([
                 function (callback) {
-                    Users.findOne({ 'username': req.user.username })
+                    Users.findOne({ 'email': req.user.email })
                         .populate('request.userId')
                         .exec((err, result) => {
                             callback(err, result);
